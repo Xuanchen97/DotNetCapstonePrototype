@@ -1,1 +1,2 @@
 # DotNetCapstonePrototype
+Have you ever been unsure of how or where to dispose of your garbage? ‘Zero Waste’ will tell you exactly how it should be disposed of with a simple scan using your smartphone’s camera. Information from an uploaded photo will provide the user with the proper protocols to dispose of their trash properly. Improper garbage disposal is a huge problem for the ecosystem, ‘Zero Waste’ would like to reduce the impact of environmental damage, and with users joining, this will drastically improve our ecosystem.
