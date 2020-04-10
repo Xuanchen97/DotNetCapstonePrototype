@@ -123,5 +123,10 @@ namespace WL_CapstonePrototype.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public static implicit operator MembershipSetsController(UsersController v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
