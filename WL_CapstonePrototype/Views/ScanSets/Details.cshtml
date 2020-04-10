@@ -1,0 +1,50 @@
+﻿@model WL_CapstonePrototype.Models.ScanSet
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ScanSet</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ScanTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ScanTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressSet.Country)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressSet.Country)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GarbageSet.GarbageName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GarbageSet.GarbageName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Users.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Users.FirstName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CapstonePrototypeDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AddressSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Country" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Region" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="City" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GarbageSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GarbageName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GarbageDetails" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MembershipSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MembershipType" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MembershipFee" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ScanSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ScanTime" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="GarbageId" Type="int" Nullable="false" />
+    <Property Name="AddressId" Type="int" />
+    <Property Name="UsersId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Gender" Type="nvarchar(max)" />
+    <Property Name="Phone" Type="nvarchar(max)" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="AddressId" Type="int" />
+    <Property Name="Membership_Id" Type="int" />
+  </EntityType>
+  <Association Name="FK_AddressScan">
+    <End Role="AddressSet" Type="Self.AddressSet" Multiplicity="0..1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AddressSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ScanGarbage">
+    <End Role="GarbageSet" Type="Self.GarbageSet" Multiplicity="1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GarbageSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="GarbageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersAddress">
+    <End Role="AddressSet" Type="Self.AddressSet" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AddressSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersMembership">
+    <End Role="MembershipSet" Type="Self.MembershipSet" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MembershipSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Membership_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersScan">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CapstonePrototypeDBModelStoreContainer">
+    <EntitySet Name="AddressSet" EntityType="Self.AddressSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GarbageSet" EntityType="Self.GarbageSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MembershipSet" EntityType="Self.MembershipSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScanSet" EntityType="Self.ScanSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AddressScan" Association="Self.FK_AddressScan">
+      <End Role="AddressSet" EntitySet="AddressSet" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ScanGarbage" Association="Self.FK_ScanGarbage">
+      <End Role="GarbageSet" EntitySet="GarbageSet" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersAddress" Association="Self.FK_UsersAddress">
+      <End Role="AddressSet" EntitySet="AddressSet" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersMembership" Association="Self.FK_UsersMembership">
+      <End Role="MembershipSet" EntitySet="MembershipSet" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersScan" Association="Self.FK_UsersScan">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

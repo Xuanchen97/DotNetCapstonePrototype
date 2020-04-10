@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CapstonePrototypeDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AddressSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Country" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Region" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ScanSet" Relationship="Self.FK_AddressScan" FromRole="AddressSet" ToRole="ScanSet" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_UsersAddress" FromRole="AddressSet" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="GarbageSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GarbageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GarbageDetails" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ScanSet" Relationship="Self.FK_ScanGarbage" FromRole="GarbageSet" ToRole="ScanSet" />
+  </EntityType>
+  <EntityType Name="MembershipSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MembershipType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MembershipFee" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_UsersMembership" FromRole="MembershipSet" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="ScanSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScanTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GarbageId" Type="Int32" Nullable="false" />
+    <Property Name="AddressId" Type="Int32" />
+    <Property Name="UsersId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="AddressSet" Relationship="Self.FK_AddressScan" FromRole="ScanSet" ToRole="AddressSet" />
+    <NavigationProperty Name="GarbageSet" Relationship="Self.FK_ScanGarbage" FromRole="ScanSet" ToRole="GarbageSet" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_UsersScan" FromRole="ScanSet" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Gender" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="AddressId" Type="Int32" />
+    <Property Name="Membership_Id" Type="Int32" />
+    <NavigationProperty Name="AddressSet" Relationship="Self.FK_UsersAddress" FromRole="Users" ToRole="AddressSet" />
+    <NavigationProperty Name="MembershipSet" Relationship="Self.FK_UsersMembership" FromRole="Users" ToRole="MembershipSet" />
+    <NavigationProperty Name="ScanSet" Relationship="Self.FK_UsersScan" FromRole="Users" ToRole="ScanSet" />
+  </EntityType>
+  <Association Name="FK_AddressScan">
+    <End Role="AddressSet" Type="Self.AddressSet" Multiplicity="0..1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AddressSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersAddress">
+    <End Role="AddressSet" Type="Self.AddressSet" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AddressSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ScanGarbage">
+    <End Role="GarbageSet" Type="Self.GarbageSet" Multiplicity="1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GarbageSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="GarbageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersMembership">
+    <End Role="MembershipSet" Type="Self.MembershipSet" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MembershipSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="Membership_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsersScan">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="ScanSet" Type="Self.ScanSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ScanSet">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CapstonePrototypeDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AddressSet" EntityType="Self.AddressSet" />
+    <EntitySet Name="GarbageSet" EntityType="Self.GarbageSet" />
+    <EntitySet Name="MembershipSet" EntityType="Self.MembershipSet" />
+    <EntitySet Name="ScanSet" EntityType="Self.ScanSet" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <AssociationSet Name="FK_AddressScan" Association="Self.FK_AddressScan">
+      <End Role="AddressSet" EntitySet="AddressSet" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersAddress" Association="Self.FK_UsersAddress">
+      <End Role="AddressSet" EntitySet="AddressSet" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ScanGarbage" Association="Self.FK_ScanGarbage">
+      <End Role="GarbageSet" EntitySet="GarbageSet" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersMembership" Association="Self.FK_UsersMembership">
+      <End Role="MembershipSet" EntitySet="MembershipSet" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsersScan" Association="Self.FK_UsersScan">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ScanSet" EntitySet="ScanSet" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

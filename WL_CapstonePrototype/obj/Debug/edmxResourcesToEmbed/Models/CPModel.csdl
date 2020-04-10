@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="CPModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="CPModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Users" EntityType="CPModel.Users" />
+    <EntitySet Name="MembershipSet" EntityType="CPModel.Membership" />
+    <EntitySet Name="AddressSet" EntityType="CPModel.Address" />
+    <AssociationSet Name="UsersAddress" Association="CPModel.UsersAddress">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Address" EntitySet="AddressSet" />
+    </AssociationSet>
+    <AssociationSet Name="UsersMembership" Association="CPModel.UsersMembership">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Membership" EntitySet="MembershipSet" />
+    </AssociationSet>
+    <EntitySet Name="GarbageSet" EntityType="CPModel.Garbage" />
+    <EntitySet Name="ScanSet" EntityType="CPModel.Scan" />
+    <AssociationSet Name="ScanGarbage" Association="CPModel.ScanGarbage">
+      <End Role="Scan" EntitySet="ScanSet" />
+      <End Role="Garbage" EntitySet="GarbageSet" />
+    </AssociationSet>
+    <AssociationSet Name="AddressScan" Association="CPModel.AddressScan">
+      <End Role="Address" EntitySet="AddressSet" />
+      <End Role="Scan" EntitySet="ScanSet" />
+    </AssociationSet>
+    <AssociationSet Name="UsersScan" Association="CPModel.UsersScan">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Scan" EntitySet="ScanSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Gender" Type="String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Phone" Type="String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Email" Type="String" Nullable="true" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Address" Relationship="CPModel.UsersAddress" FromRole="Users" ToRole="Address" />
+    <Property Name="AddressId" Type="Int32" Nullable="true" />
+    <NavigationProperty Name="Membership" Relationship="CPModel.UsersMembership" FromRole="Users" ToRole="Membership" />
+    <NavigationProperty Name="Scan" Relationship="CPModel.UsersScan" FromRole="Users" ToRole="Scan" />
+  </EntityType>
+  <EntityType Name="Membership">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MembershipType" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="MembershipFee" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Users" Relationship="CPModel.UsersMembership" FromRole="Membership" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Address">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Country" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Region" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="City" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Users" Relationship="CPModel.UsersAddress" FromRole="Address" ToRole="Users" />
+    <NavigationProperty Name="Scan" Relationship="CPModel.AddressScan" FromRole="Address" ToRole="Scan" />
+  </EntityType>
+  <Association Name="UsersAddress">
+    <End Type="CPModel.Users" Role="Users" Multiplicity="*" />
+    <End Type="CPModel.Address" Role="Address" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Address">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UsersMembership">
+    <End Type="CPModel.Users" Role="Users" Multiplicity="*" />
+    <End Type="CPModel.Membership" Role="Membership" Multiplicity="0..1" />
+  </Association>
+  <EntityType Name="Garbage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GarbageName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="GarbageDetails" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Scan" Relationship="CPModel.ScanGarbage" FromRole="Garbage" ToRole="Scan" />
+  </EntityType>
+  <EntityType Name="Scan">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScanTime" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="Garbage" Relationship="CPModel.ScanGarbage" FromRole="Scan" ToRole="Garbage" />
+    <Property Name="GarbageId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Address" Relationship="CPModel.AddressScan" FromRole="Scan" ToRole="Address" />
+    <Property Name="AddressId" Type="Int32" Nullable="true" />
+    <NavigationProperty Name="Users" Relationship="CPModel.UsersScan" FromRole="Scan" ToRole="Users" />
+    <Property Name="UsersId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="ScanGarbage">
+    <End Type="CPModel.Scan" Role="Scan" Multiplicity="*" />
+    <End Type="CPModel.Garbage" Role="Garbage" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Garbage">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scan">
+        <PropertyRef Name="GarbageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="AddressScan">
+    <End Type="CPModel.Address" Role="Address" Multiplicity="0..1" />
+    <End Type="CPModel.Scan" Role="Scan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Address">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scan">
+        <PropertyRef Name="AddressId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UsersScan">
+    <End Type="CPModel.Users" Role="Users" Multiplicity="1" />
+    <End Type="CPModel.Scan" Role="Scan" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Scan">
+        <PropertyRef Name="UsersId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
